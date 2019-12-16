@@ -44,7 +44,7 @@ abstract class VideoGameDatabase : RoomDatabase() {
                     Thread(Runnable {
                         var videogameDao= getInstance(context).videogameDatabaseDao
                         for (vg in getVideoGames()){
-                            videogameDao.AddVideoGame(vg)
+                            videogameDao.addVideoGame(vg)
                             Log.i("VideoGameDatabase", vg.name)
                         }
                     }).start()

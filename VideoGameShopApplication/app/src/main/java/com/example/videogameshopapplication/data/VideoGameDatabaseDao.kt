@@ -7,13 +7,13 @@ import androidx.room.*
 interface VideoGameDatabaseDao {
 
     @Insert
-    fun AddVideoGame(videoGame: VideoGame)
+    fun addVideoGame(videoGame: VideoGame)
 
     @Update
-    fun UpdateVideoGame(videoGame: VideoGame)
+    fun updateVideoGame(videoGame: VideoGame)
 
     @Delete
-    fun DeleteVideoGame(videoGame: VideoGame)
+    fun deleteVideoGame(videoGame: VideoGame)
 
     @Query("SELECT * FROM videogames_table ORDER BY name DESC")
     fun getAllVideoGames(): LiveData<List<VideoGame>>
