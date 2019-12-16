@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
-interface FatDatabaseDao {
+interface VideoGameDatabaseDao {
 
     @Insert
     fun AddVideoGame(videoGame: VideoGame)
