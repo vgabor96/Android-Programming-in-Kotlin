@@ -15,7 +15,7 @@ abstract class VideoGameDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: VideoGameDatabase? = null
         fun getInstance(context: Context): VideoGameDatabase {
-            Log.i("FatDatabase", "get instance entry")
+            Log.i("VideoGameDatabase", "get instance entry")
             synchronized(this) {
                 var instance = INSTANCE
 
@@ -36,9 +36,7 @@ abstract class VideoGameDatabase : RoomDatabase() {
             }
         }
 
-        //https://matthiaslischka.at/2019/01/15/Seed-Room-Database/
-        //https://anadea.info/blog/how-to-pre-populate-android-room-database-on-first-application-launch
-        private fun seedDatabaseCallback(context: Context): RoomDatabase.Callback {
+       private fun seedDatabaseCallback(context: Context): RoomDatabase.Callback {
             return object : Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
