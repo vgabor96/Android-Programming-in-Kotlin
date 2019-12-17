@@ -9,9 +9,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.*
-import com.example.videogameshopapplication.data.VideoGame
-import com.example.videogameshopapplication.data.VideoGameDatabase
-import com.example.videogameshopapplication.data.VideoGameRepository
+import com.example.videogameshopapplication.data.*
 import kotlinx.coroutines.launch
 import java.lang.NumberFormatException
 
@@ -21,7 +19,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     var videoGames:LiveData<List<VideoGame>>
     val videoGamesString : LiveData<Spanned>
     lateinit var selectedVideoGame : VideoGame
-   // private var fatAmount =0f
+    private var fatAmount =0f
 
     init {
         val dataSource = VideoGameDatabase.getInstance(application).videogameDatabaseDao
@@ -30,22 +28,20 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         videoGames=repository.videoGames
 
 
-        val dailyIntakes=repository.videoGames
-        videoGamesString = Transformations.map(dailyIntakes) { items ->
+        val vgames=repository.videoGames
+        videoGamesString = Transformations.map(vgames) { items ->
             formatVideoGames(items, application.resources)
         }
-        /*
 
-
-         */
-        initializeDailyIntake()
+        initializeVideoGames()
 
     }
-    private fun initializeDailyIntake() {
+    private fun initializeVideoGames() {
         viewModelScope.launch {
             /*
             dailyIntake.value = repository.getTodayIntake()
             */
+            videoGame.value = repository.getVideoGame()
 
         }
     }
@@ -69,22 +65,22 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             dailyOmega3 =fat.omega3*fatAmount,
             dailyOmega6 = fat.omega6*fatAmount,
             dailyCholesterol = fat.cholesterol*fatAmount)
-
+*/
         viewModelScope.launch {
-            repository.insert(newIntake)
+            repository.insert(videoGame)
         }
-        */
+
 
     }
 
     fun onTextChanged(text : CharSequence){
-       /*
+
         try {
-            fatAmount = text.toString().toFloat()
+             fatAmount = text.toString().toFloat()
         } catch (e: NumberFormatException) {
             fatAmount=0f
         }
-        */
+
 
     }
 }

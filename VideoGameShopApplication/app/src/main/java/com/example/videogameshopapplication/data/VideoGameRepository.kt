@@ -10,30 +10,24 @@ class VideoGameRepository(private  val database: VideoGameDatabaseDao) {
 
     val videoGames=database.getAllVideoGames()
 
-   /* suspend fun getTodayIntake(): DailyIntake? {
+    suspend fun getVideoGame(): VideoGame? {
         return withContext(Dispatchers.IO) {
-            var lastIntake = database.getLastIntake()
+            var lastIntake = database.getLastVideoGame()
             var result =lastIntake
 
-            lastIntake?.let{
-                val date = Date(it.dateOfIntake)
-                if (date != Date(System.currentTimeMillis())) {
-                    result = null
-                }
-            }
-            result
+         result
         }
     }
-*/
-    suspend fun Add(videoGame: VideoGame) {
+
+    suspend fun insert(videoGame: VideoGame) {
         withContext(Dispatchers.IO) {
-            database.addVideoGame(videoGame)
+            database.insert(videoGame)
         }
     }
 
     suspend fun update(videoGame: VideoGame) {
         withContext(Dispatchers.IO) {
-            database.updateVideoGame(videoGame)
+            database.update(videoGame)
         }
     }
 }

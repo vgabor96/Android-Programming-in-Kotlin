@@ -1,21 +1,28 @@
 package com.example.videogameshopapplication.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import androidx.room.Delete
 
 @Dao
 interface VideoGameDatabaseDao {
 
     @Insert
-    fun addVideoGame(videoGame: VideoGame)
+    fun insert(videoGame: VideoGame)
 
     @Update
-    fun updateVideoGame(videoGame: VideoGame)
+    fun update(videoGame: VideoGame)
 
     @Delete
-    fun deleteVideoGame(videoGame: VideoGame)
+    fun delete(videoGame: VideoGame)
 
     @Query("SELECT * FROM videogames_table ORDER BY name DESC")
     fun getAllVideoGames(): LiveData<List<VideoGame>>
+
+    @Query("SELECT * FROM videogames_table ORDER BY name DESC LIMIT 1")
+    fun getLastVideoGame(): VideoGame?
 
 }
