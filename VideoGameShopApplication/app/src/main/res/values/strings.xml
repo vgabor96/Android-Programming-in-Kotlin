@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Video Game Shop</string>
-    <string name="intake">Add type and amount of your fat you have eaten.</string>
-    <string name="gramm">gramm</string>
-    <string name="Add_button">Add</string>
-    <string name="title">Daily Intakes</string>
-</resources>
