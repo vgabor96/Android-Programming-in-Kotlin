@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(entities=[VideoGame::class], version=1, exportSchema=false)
 abstract class VideoGameDatabase : RoomDatabase() {
@@ -23,6 +24,7 @@ abstract class VideoGameDatabase : RoomDatabase() {
                         VideoGameDatabase::class.java,
                         "video_game_database"
                     )
+                        .addCallback(seedDatabaseCallback(context))
                         .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
@@ -30,6 +32,19 @@ abstract class VideoGameDatabase : RoomDatabase() {
                 return instance
             }
 
+        }
+
+        private fun seedDatabaseCallback(context: Context): RoomDatabase.Callback {
+                return object : Callback() {
+                    override fun onCreate(db: SupportSQLiteDatabase) {
+                        super.onCreate(db)
+                        Thread(Runnable {
+                            var videoGameDao= getInstance(context).videoGameDatabaseDao
+                            for(vg in getVideoGames())
+                                videoGameDao.insertVideoGame(vg)
+                        }).start()
+                    }
+                }
         }
 
     }
