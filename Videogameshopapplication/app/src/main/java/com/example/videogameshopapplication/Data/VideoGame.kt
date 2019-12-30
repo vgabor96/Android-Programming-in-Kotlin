@@ -20,6 +20,10 @@ data class VideoGame (
     var platform:String="",
 
     @ColumnInfo(name="price")
-    var price:Float=0f
+    var price:Float=0f) {
 
-)
+    override fun toString(): String {
+        return name
+    }
+
+}
