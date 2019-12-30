@@ -12,17 +12,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.videogameshopapplication.data.VideoGame
+import com.example.videogameshopapplication.data.FatFact
 import com.example.videogameshopapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-   /* override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-
-    */
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var  spinner: Spinner
@@ -34,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
 
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding=DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         binding.viewModel = viewModel
         binding.setLifecycleOwner(this)
@@ -59,11 +52,11 @@ class MainActivity : AppCompatActivity() {
 
     //https://medium.com/@wa.maebenson06/using-android-livedata-in-spinners-room-428de4238847
     private fun initData() {
-        var adapter = ArrayAdapter<VideoGame>(this, android.R.layout.simple_spinner_item)
+        var adapter = ArrayAdapter<FatFact>(this, android.R.layout.simple_spinner_item)
 
-        viewModel.videoGames.observe(this, Observer { videoGames ->
+        viewModel.fatFacts.observe(this, Observer { fatFacts ->
 
-            videoGames?.forEach {
+            fatFacts?.forEach {
                 adapter.add(it)
             }
         })

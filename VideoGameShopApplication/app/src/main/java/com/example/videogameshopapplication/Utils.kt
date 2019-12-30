@@ -5,19 +5,20 @@ import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
-import com.example.videogameshopapplication.data.VideoGame
+import com.example.videogameshopapplication.data.DailyIntake
+import java.util.*
 
-
-fun formatVideoGames(videoGames: List<VideoGame>, resources: Resources): Spanned {
+//We should use RecycleView, but that is out of scope of the course.
+fun formatDailyIntakes(dailyIntakes: List<DailyIntake>, resources: Resources): Spanned {
     val sb = StringBuilder()
     sb.apply {
         append(resources.getString(R.string.title))
-        videoGames.forEach {
+        dailyIntakes.forEach {
             append("<br>")
-            append("Name: ${it.name}<br>")
-            append("Publisher: ${it.publisher} ")
-            append("\tPlatForm: ${it.platform} <br>")
-            append("\tPrice: ${it.price} g<br><br>")
+            append("${Date(it.dateOfIntake)}<br>")
+                append("omega 3: ${it.dailyOmega3} mg")
+                append("\tomega 6: ${it.dailyOmega6} mg<br>")
+                append("cholesterol: ${it.dailyCholesterol} g<br><br>")
         }
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
