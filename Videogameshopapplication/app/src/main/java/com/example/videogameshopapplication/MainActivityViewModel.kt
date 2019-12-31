@@ -22,15 +22,16 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-       selectedVideoGame=parent?.getItemAtPosition(position) as VideoGame
+        selectedPlatform=parent?.getItemAtPosition(position) as String
 
-        Log.i("MainActivityViewModel", "selected: "+selectedVideoGame)
+        Log.i("MainActivityViewModel", "selected: "+selectedPlatform)
 
         }
 
     private val repository: VideoGameRepository
     var videoGames:LiveData<List<VideoGame>>
     lateinit var selectedVideoGame: VideoGame
+    lateinit var selectedPlatform: String
 
     init {
         val dataSource=VideoGameDatabase.getInstance(application).videoGameDatabaseDao

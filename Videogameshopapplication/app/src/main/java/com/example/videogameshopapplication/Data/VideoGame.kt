@@ -23,7 +23,8 @@ data class VideoGame (
     var price:Float=0f) {
 
     override fun toString(): String {
-        return name
+        return "${id}\t${name}\t${publisher}\t${platform}\t${price}"
     }
+
 
 }
