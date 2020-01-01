@@ -13,4 +13,10 @@ class VideoGameRepository(private val database:VideoGameDatabaseDao) {
         }
     }
 
+    suspend fun delete(videoGame: VideoGame) {
+        withContext(Dispatchers.IO) {
+            database.delete(videoGame)
+        }
+    }
+
 }

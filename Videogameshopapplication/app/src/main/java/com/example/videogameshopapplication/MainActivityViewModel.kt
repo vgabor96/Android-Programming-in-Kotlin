@@ -13,6 +13,7 @@ import com.example.videogameshopapplication.Data.VideoGame
 import com.example.videogameshopapplication.Data.VideoGameDatabase
 import com.example.videogameshopapplication.Data.VideoGameRepository
 import kotlinx.coroutines.launch
+import java.lang.NumberFormatException
 import javax.sql.DataSource
 
 class MainActivityViewModel(application: Application): AndroidViewModel(application), AdapterView.OnItemSelectedListener {
@@ -32,6 +33,12 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
 
     private val repository: VideoGameRepository
     var videoGames:LiveData<List<VideoGame>>
+    val videoGameList:ArrayList<VideoGame> = ArrayList<VideoGame>()
+    private var selectedVideoGameID: Long = -1
+    private var selectedVideoGameName: String = ""
+    private var selectedVideoGamePublisher: String = ""
+    private var selectedVideoGamePlatfrom: String = ""
+    private var selectedVideoGamePrice: Float = 0f
     lateinit var selectedVideoGame: VideoGame
     lateinit var selectedPlatform: String
 
@@ -51,14 +58,54 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
 
     fun onAdd()
     {
+        var name : String = selectedVideoGameName
+        var publisher : String = selectedVideoGamePublisher
+        var platform : String = selectedVideoGamePlatfrom
+        var price : Float = selectedVideoGamePrice
 
-        val vg = selectedVideoGame
-
-        if (vg != null)
-        {
             viewModelScope.launch {
-                repository.insert(selectedVideoGame)
+
+                repository.insert( VideoGame(name = name, publisher = publisher, platform = platform, price=price))
+                videoGameList.clear()
             }
+
+    }
+
+    fun onDelete(videoGame: VideoGame)
+    {
+        viewModelScope.launch {
+
+            repository.delete( videoGame)
+            videoGameList.clear()
+        }
+
+    }
+
+    fun onTextChangedID(text : CharSequence){
+        try {
+                selectedVideoGameID = text.toString().toLong()
+        }catch (e: NumberFormatException){
+            selectedVideoGameID = 0
         }
     }
+    fun onTextChangedName(text : CharSequence){
+        selectedVideoGameName = text.toString()
+    }
+    fun onTextChangedPublisher(text : CharSequence){
+        selectedVideoGamePublisher = text.toString()
+    }
+    fun onTextChangedPlatform(text : CharSequence){
+        selectedVideoGamePlatfrom = text.toString()
+    }
+    fun onTextChangedPrice(text : CharSequence){
+        try {
+            selectedVideoGamePrice = text.toString().toFloat()
+        }catch (e: NumberFormatException) {
+            selectedVideoGamePrice = 0f
+        }
+
+    }
+
+
+
 }

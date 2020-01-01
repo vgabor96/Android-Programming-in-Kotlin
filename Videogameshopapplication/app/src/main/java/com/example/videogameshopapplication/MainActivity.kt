@@ -24,6 +24,7 @@ import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.example.videogameshopapplication.Data.getAllPlatforms
+import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var textall: TextView
     private val productList = ArrayList<VideoGame>()
-
+    private var isinit : Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,80 @@ class MainActivity : AppCompatActivity() {
 
         initData()
 
+        binding.idTxt.addTextChangedListener(object : TextWatcher {
 
+            override fun afterTextChanged(s: Editable) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+              viewModel.onTextChangedID(s)
+            }
+        })
+
+        binding.nameTxt.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                viewModel.onTextChangedName(s)
+            }
+        })
+
+        binding.publisherTxt.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                viewModel.onTextChangedPublisher(s)
+            }
+        })
+
+        binding.platformTxt.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                viewModel.onTextChangedPlatform(s)
+            }
+        })
+
+        binding.priceTxt.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                viewModel.onTextChangedPrice(s)
+            }
+        })
 
     }
 
@@ -62,20 +136,48 @@ class MainActivity : AppCompatActivity() {
 
         listview = findViewById(R.id.listview)
 
+            viewModel.videoGameList.clear()
+        viewModel.videoGames.observe(this, Observer {
+                videoGames -> videoGames?.forEach {
 
+                    viewModel.videoGameList.add(it)
+                }
+             var adapter = listviewAdapter(this, viewModel.videoGameList)
 
-
-        viewModel.videoGames.observe(this, Observer { videoGames ->
-            videoGames?.forEach{
-                productList.add(it)
-
-
-            }
-
-            var adapter = listviewAdapter(this, productList)
             listview.setAdapter(adapter)
             adapter.notifyDataSetChanged()
+
         })
+
+/*
+            viewModel.videoGames.observe(this, Observer {
+              videoGames ->
+          run loop@{
+              videoGames?.forEach {
+                 if (!isinit){
+                      return@loop
+                   }
+                     productList.add(it)
+                 }
+
+              }
+             if (!isinit){
+                   productList.add(videoGames.last())
+              }
+             isinit = false
+
+
+
+                  var adapter = listviewAdapter(this, productList)
+
+                 listview.setAdapter(adapter)
+                 adapter.notifyDataSetChanged()
+
+     })
+*/
+
+
+
 
         listview.setOnItemClickListener(OnItemClickListener { parent, view, position, id ->
             val sid = (view.findViewById(R.id.tv_id) as TextView).text.toString()
@@ -90,8 +192,11 @@ class MainActivity : AppCompatActivity() {
                         + "Name : " + name + "\n"
                         + "Publisher : " + publisher + "\n"
                         + "Platform : " + platform + "\n"
-                        + "Price : " + price, Toast.LENGTH_SHORT
+                        + "Price : " + price
+                        + "DELETED", Toast.LENGTH_SHORT
             ).show()
+            viewModel.onDelete(listview.getItemAtPosition(position) as VideoGame)
+
         })
 
 
@@ -102,17 +207,6 @@ class MainActivity : AppCompatActivity() {
         spinner=findViewById(R.id.spinner)
     spinner.adapter=adapter1
     spinner.onItemSelectedListener=viewModel
-
-
-
-
-
-
-       // listview.adapter=adapter
-
-
-
-
 
     }
 }
