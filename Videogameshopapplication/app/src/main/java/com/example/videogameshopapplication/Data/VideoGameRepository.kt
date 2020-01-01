@@ -19,4 +19,10 @@ class VideoGameRepository(private val database:VideoGameDatabaseDao) {
         }
     }
 
+    suspend fun findVideoGameById(id : Long):VideoGame {
+        return withContext(Dispatchers.IO) {
+            database.findVideoGameById(id)
+        }
+    }
+
 }

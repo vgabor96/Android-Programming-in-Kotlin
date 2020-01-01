@@ -18,4 +18,7 @@ interface VideoGameDatabaseDao {
     @Delete
     fun delete(videoGame: VideoGame)
 
+    @Query("SELECT * FROM video_games_table WHERE id = :id")
+    fun findVideoGameById(id : Long):VideoGame
+
 }

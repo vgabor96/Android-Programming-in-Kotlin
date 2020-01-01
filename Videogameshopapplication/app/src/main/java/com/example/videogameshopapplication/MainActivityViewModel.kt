@@ -71,12 +71,13 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
 
     }
 
-    fun onDelete(videoGame: VideoGame)
+    fun onDelete(id : Long)
     {
         viewModelScope.launch {
-
-            repository.delete( videoGame)
-            videoGameList.clear()
+            if (repository.findVideoGameById(id) != null) {
+                repository.delete(repository.findVideoGameById(id))
+                videoGameList.clear()
+            }
         }
 
     }

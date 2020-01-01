@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity() {
                         + "Price : " + price
                         + "DELETED", Toast.LENGTH_SHORT
             ).show()
-            viewModel.onDelete(listview.getItemAtPosition(position) as VideoGame)
+            viewModel.onDelete(sid.toLong())
 
         })
 
