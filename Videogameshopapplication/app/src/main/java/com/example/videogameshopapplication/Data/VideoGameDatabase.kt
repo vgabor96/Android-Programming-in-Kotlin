@@ -17,7 +17,7 @@ abstract class VideoGameDatabase : RoomDatabase() {
             synchronized(this) {
                 var instance = INSTANCE
 
-                if (instance == null) {
+            if (instance == null) {
 
                     instance = Room.databaseBuilder(
                         context.applicationContext,
@@ -41,7 +41,7 @@ abstract class VideoGameDatabase : RoomDatabase() {
                         Thread(Runnable {
                             var videoGameDao= getInstance(context).videoGameDatabaseDao
                             for(vg in getVideoGames())
-                                videoGameDao.insertVideoGame(vg)
+                                videoGameDao.insert(vg)
                         }).start()
                     }
                 }

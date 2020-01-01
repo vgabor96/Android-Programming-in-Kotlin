@@ -8,9 +8,11 @@ import android.widget.AdapterView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.example.videogameshopapplication.Data.VideoGame
 import com.example.videogameshopapplication.Data.VideoGameDatabase
 import com.example.videogameshopapplication.Data.VideoGameRepository
+import kotlinx.coroutines.launch
 import javax.sql.DataSource
 
 class MainActivityViewModel(application: Application): AndroidViewModel(application), AdapterView.OnItemSelectedListener {
@@ -45,5 +47,18 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
         }
 
 
+    }
+
+    fun onAdd()
+    {
+
+        val vg = selectedVideoGame
+
+        if (vg != null)
+        {
+            viewModelScope.launch {
+                repository.insert(selectedVideoGame)
+            }
+        }
     }
 }

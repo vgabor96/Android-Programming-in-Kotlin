@@ -56,11 +56,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
     private fun initData() {
       var adapter1=ArrayAdapter<String>(this,android.R.layout.simple_spinner_item)
 
         listview = findViewById(R.id.listview)
-
 
 
 
@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
 
             }
+
             var adapter = listviewAdapter(this, productList)
             listview.setAdapter(adapter)
             adapter.notifyDataSetChanged()

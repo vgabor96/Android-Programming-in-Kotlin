@@ -9,9 +9,9 @@ import androidx.room.Query
 interface VideoGameDatabaseDao {
 
     @Insert
-    fun insertVideoGame(videoGame: VideoGame)
+    fun insert(videoGame: VideoGame)
 
-    @Query("SELECT * FROM video_games_table ORDER BY name DESC")
+    @Query("SELECT * FROM video_games_table ORDER BY id ASC")
     fun getAllVideoGames():LiveData<List<VideoGame>>
 
 
