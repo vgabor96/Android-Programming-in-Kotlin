@@ -25,4 +25,10 @@ class VideoGameRepository(private val database:VideoGameDatabaseDao) {
         }
     }
 
+    suspend fun updateVideoGame(id : Long, name : String, publisher : String, platform : String, price : Float){
+        return withContext(Dispatchers.IO) {
+            database.updateVideoGame(id,name,publisher,platform,price)
+        }
+    }
+
 }

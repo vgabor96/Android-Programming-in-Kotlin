@@ -56,18 +56,45 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
 
     }
 
-    fun onAdd()
-    {
+    fun onAddorModify(){
+
+        var id : Long = selectedVideoGameID
         var name : String = selectedVideoGameName
         var publisher : String = selectedVideoGamePublisher
         var platform : String = selectedVideoGamePlatfrom
         var price : Float = selectedVideoGamePrice
+
+        viewModelScope.launch {
+            if (repository.findVideoGameById(id) != null) {
+              onModify(id,name,publisher,platform,price)
+            }
+            else{
+                onAdd(name,publisher,platform,price)
+            }
+        }
+
+    }
+
+
+    fun onAdd(name : String, publisher : String, platform : String, price : Float) {
+
 
             viewModelScope.launch {
 
                 repository.insert( VideoGame(name = name, publisher = publisher, platform = platform, price=price))
                 videoGameList.clear()
             }
+
+    }
+
+    fun onModify(id: Long,name : String, publisher : String, platform : String, price : Float) {
+
+
+        viewModelScope.launch {
+
+            repository.updateVideoGame(id,name,publisher,platform,price)
+            videoGameList.clear()
+        }
 
     }
 
