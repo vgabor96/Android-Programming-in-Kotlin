@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.example.videogameshopapplication.Data.VideoGame
@@ -19,21 +20,9 @@ import javax.sql.DataSource
 class MainActivityViewModel(application: Application): AndroidViewModel(application), AdapterView.OnItemSelectedListener {
 
      val videoGameString: LiveData<Spanned>
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        selectedPlatform=parent?.getItemAtPosition(position) as String
-
-        Log.i("MainActivityViewModel", "selected: "+selectedPlatform)
-
-        }
-
-    private val repository: VideoGameRepository
-    var videoGames:LiveData<List<VideoGame>>
-    val videoGameList:ArrayList<VideoGame> = ArrayList<VideoGame>()
+    var repository: VideoGameRepository
+    //var videoGames:LiveData<List<VideoGame>>
+    var videoGameList:ArrayList<VideoGame> = ArrayList<VideoGame>()
     private var selectedVideoGameID: Long = -1
     private var selectedVideoGameName: String = ""
     private var selectedVideoGamePublisher: String = ""
@@ -42,19 +31,98 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
     lateinit var selectedVideoGame: VideoGame
     lateinit var selectedPlatform: String
 
+
+
+
     init {
         val dataSource=VideoGameDatabase.getInstance(application).videoGameDatabaseDao
         repository= VideoGameRepository(dataSource)
 
-        videoGames=repository.videoGames
 
-        videoGameString = Transformations.map(videoGames) { items ->
+
+        repository.videoGames.value?.forEach {
+            videoGameList.add(it)
+        }
+
+        videoGameString = Transformations.map( repository.videoGames) { items ->
             formatVideoGames(items, application.resources)
 
         }
 
 
     }
+
+fun Update_VideoGameList() {
+
+
+        videoGameList.clear()
+
+    repository.videoGames.value?.forEach {
+            videoGameList.add(it)
+        }
+
+
+}
+
+    fun onIdColClicked(idbtnasc : Boolean){
+        if(idbtnasc){
+             videoGameList.sortWith(compareBy({it.id}))
+
+        }else {
+
+            videoGameList.sortWith(compareBy({it.id}))
+            videoGameList.reverse()
+        }
+
+    }
+
+    fun onNameColClicked(idbtnasc : Boolean){
+        if(idbtnasc){
+            videoGameList.sortWith(compareBy({it.name}))
+
+        }else {
+
+            videoGameList.sortWith(compareBy({it.name}))
+            videoGameList.reverse()
+        }
+    }
+
+    fun onPublisherColClicked(idbtnasc : Boolean){
+        if(idbtnasc){
+
+            videoGameList.sortWith(compareBy({it.publisher}))
+
+        }else {
+
+            videoGameList.sortWith(compareBy({it.publisher}))
+            videoGameList.reverse()
+        }
+    }
+
+    fun onPlatformColClicked(idbtnasc : Boolean){
+        if(idbtnasc){
+
+            videoGameList.sortWith(compareBy({it.platform}))
+
+        }else {
+
+            videoGameList.sortWith(compareBy({it.platform}))
+            videoGameList.reverse()
+        }
+    }
+
+    fun onPriceColClicked(idbtnasc : Boolean){
+        if(idbtnasc){
+
+            videoGameList.sortWith(compareBy({it.price}))
+
+        }else {
+
+            videoGameList.sortWith(compareBy({it.price}))
+            videoGameList.reverse()
+        }
+    }
+
 
     fun onAddorModify(){
 
@@ -71,10 +139,10 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
             else{
                 onAdd(name,publisher,platform,price)
             }
+
         }
 
     }
-
 
     fun onAdd(name : String, publisher : String, platform : String, price : Float) {
 
@@ -82,7 +150,8 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
             viewModelScope.launch {
 
                 repository.insert( VideoGame(name = name, publisher = publisher, platform = platform, price=price))
-                videoGameList.clear()
+                //Update_VideoGameList()
+                videoGameList?.sortedWith(compareByDescending({it.id}))
             }
 
     }
@@ -93,21 +162,25 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
         viewModelScope.launch {
 
             repository.updateVideoGame(id,name,publisher,platform,price)
-            videoGameList.clear()
+            //Update_VideoGameList()
+            videoGameList?.sortedWith(compareByDescending({it.id}))
         }
 
     }
 
-    fun onDelete(id : Long)
-    {
+    fun onDelete(id : Long) {
         viewModelScope.launch {
             if (repository.findVideoGameById(id) != null) {
                 repository.delete(repository.findVideoGameById(id))
-                videoGameList.clear()
+              //  Update_VideoGameList()
+                videoGameList?.sortedWith(compareByDescending({it.id}))
             }
         }
 
     }
+
+
+
 
     fun onTextChangedID(text : CharSequence){
         try {
@@ -122,9 +195,6 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
     fun onTextChangedPublisher(text : CharSequence){
         selectedVideoGamePublisher = text.toString()
     }
-    fun onTextChangedPlatform(text : CharSequence){
-        selectedVideoGamePlatfrom = text.toString()
-    }
     fun onTextChangedPrice(text : CharSequence){
         try {
             selectedVideoGamePrice = text.toString().toFloat()
@@ -134,6 +204,15 @@ class MainActivityViewModel(application: Application): AndroidViewModel(applicat
 
     }
 
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        selectedVideoGamePlatfrom=parent?.getItemAtPosition(position) as String
+
+        Log.i("MainActivityViewModel", "selected: "+selectedVideoGamePlatfrom)
+
+    }
 
 }

@@ -14,18 +14,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="500dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout
@@ -132,8 +120,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/platformTxt"
+        <Spinner
+            android:id="@+id/spinner"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
@@ -180,7 +168,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_5"
-        android:onClick="@{() -> viewModel.onAddorModify()}" />
+        android:onClick="onAddorModifyClick" />
     <LinearLayout
 
         android:id="@+id/ll"
@@ -194,20 +182,26 @@
         android:shrinkColumns="*"
         android:stretchColumns="*">
 
-        <TextView
-            android:layout_weight="1"
-            android:id="@+id/tablecol_Id"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="ID"
+                <TextView
+                    android:layout_weight="1"
+                    android:id="@+id/tablecol_Id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="onIdColClickedmain"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="ID"
 
-            />
+                 />
 
                 <TextView
                     android:layout_weight="1"
                     android:id="@+id/tablecol_Name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:onClick="onClickCol_Name"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="Name"
 
                     />
@@ -216,6 +210,9 @@
                     android:id="@+id/tablecol_Publisher"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:onClick="onClickCol_Publisher"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="Publisher"
 
                     />
@@ -224,6 +221,9 @@
                     android:id="@+id/tablecol_Platform"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:onClick="onClickCol_Platform"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="Platform"
 
                     />
@@ -232,6 +232,9 @@
                     android:id="@+id/tablecol_Price"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:onClick="onClickCol_Price"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="Price"
 
                     />
@@ -240,7 +243,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="340dp"
+        android:layout_height="250dp"
         app:layout_constraintTop_toBottomOf="@+id/ll">
 
 

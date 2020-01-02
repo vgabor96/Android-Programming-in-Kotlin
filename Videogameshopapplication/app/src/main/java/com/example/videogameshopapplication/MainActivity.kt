@@ -33,11 +33,59 @@ class MainActivity : AppCompatActivity() {
     private lateinit var spinner: Spinner
     private lateinit var tablerow: TextView
     private lateinit var listview: ListView
+    private lateinit var idcoltv: TextView
     private lateinit var llgames: LinearLayout
     private lateinit var binding: ActivityMainBinding
     private lateinit var textall: TextView
-    private val productList = ArrayList<VideoGame>()
+    private var productList = ArrayList<VideoGame>()
     private var isinit : Boolean = true
+
+    private var idbtnasc: Boolean = false
+    private var namebtnasc: Boolean = false
+    private var publisherbtnasc: Boolean = false
+    private var platformbtnasc: Boolean = false
+    private var pricebtnasc: Boolean = false
+
+      var adapter = listviewAdapter(this,productList)
+
+     fun onIdColClickedmain(view : View) {
+
+        viewModel.onIdColClicked(idbtnasc)
+        adapter.notifyDataSetChanged()
+
+        idbtnasc = !idbtnasc
+    }
+
+
+
+    fun onClickCol_Name(view : View) {
+        viewModel.onNameColClicked(namebtnasc)
+        adapter.notifyDataSetChanged()
+        namebtnasc = !namebtnasc
+    }
+
+    fun onClickCol_Publisher(view : View) {
+        viewModel.onPublisherColClicked(publisherbtnasc)
+        adapter.notifyDataSetChanged()
+        publisherbtnasc = !publisherbtnasc
+    }
+
+    fun onClickCol_Platform(view : View) {
+        viewModel.onPlatformColClicked(platformbtnasc)
+        adapter.notifyDataSetChanged()
+        platformbtnasc = !platformbtnasc
+    }
+
+    fun onClickCol_Price(view : View) {
+        viewModel.onPriceColClicked(pricebtnasc)
+        adapter.notifyDataSetChanged()
+        pricebtnasc = !pricebtnasc
+    }
+
+    fun onAddorModifyClick(view: View){
+        viewModel.onAddorModify()
+        adapter.notifyDataSetChanged()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +98,57 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.setLifecycleOwner(this)
 
-        initData()
+
+        var adapter1=ArrayAdapter<String>(this,android.R.layout.simple_spinner_item)
+
+        listview = findViewById(R.id.listview)
+
+
+        viewModel.repository.videoGames.observe(this, Observer {
+
+
+
+            adapter = listviewAdapter(this,viewModel.videoGameList)
+            viewModel.Update_VideoGameList()
+            adapter.notifyDataSetChanged()
+            listview.setAdapter(adapter)
+
+
+        })
+
+
+        listview.setOnItemClickListener(OnItemClickListener { parent, view, position, id ->
+            val sid = (view.findViewById(R.id.tv_id) as TextView).text.toString()
+            val name = (view.findViewById(R.id.tv_name) as TextView).text.toString()
+            val publisher = (view.findViewById(R.id.tv_publisher) as TextView).text.toString()
+            val platform = (view.findViewById(R.id.tv_platform) as TextView).text.toString()
+            val price = (view.findViewById(R.id.tv_price) as TextView).text.toString()
+
+            Toast.makeText(
+                applicationContext,
+                "S no : " + sid + "\n"
+                        + "Name : " + name + "\n"
+                        + "Publisher : " + publisher + "\n"
+                        + "Platform : " + platform + "\n"
+                        + "Price : " + price
+                        + "DELETED", Toast.LENGTH_SHORT
+            ).show()
+            viewModel.onDelete(sid.toLong())
+
+            adapter.notifyDataSetChanged()
+
+        })
+
+
+
+        getAllPlatforms().forEach{
+            adapter1.add(it)
+        }
+
+
+        spinner=findViewById(R.id.spinner)
+        spinner.adapter=adapter1
+        spinner.onItemSelectedListener=viewModel
 
         binding.idTxt.addTextChangedListener(object : TextWatcher {
 
@@ -97,21 +195,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.platformTxt.addTextChangedListener(object : TextWatcher {
-
-            override fun afterTextChanged(s: Editable) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                viewModel.onTextChangedPlatform(s)
-            }
-        })
-
         binding.priceTxt.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
@@ -128,85 +211,16 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+   override fun onResume() {
+        super.onResume()
 
 
-
-    private fun initData() {
-      var adapter1=ArrayAdapter<String>(this,android.R.layout.simple_spinner_item)
-
-        listview = findViewById(R.id.listview)
-
-            viewModel.videoGameList.clear()
-        viewModel.videoGames.observe(this, Observer {
-                videoGames -> videoGames?.forEach {
-
-                    viewModel.videoGameList.add(it)
-                }
-             var adapter = listviewAdapter(this, viewModel.videoGameList)
-
-            listview.setAdapter(adapter)
-            adapter.notifyDataSetChanged()
-
-        })
-
-/*
-            viewModel.videoGames.observe(this, Observer {
-              videoGames ->
-          run loop@{
-              videoGames?.forEach {
-                 if (!isinit){
-                      return@loop
-                   }
-                     productList.add(it)
-                 }
-
-              }
-             if (!isinit){
-                   productList.add(videoGames.last())
-              }
-             isinit = false
-
-
-
-                  var adapter = listviewAdapter(this, productList)
-
-                 listview.setAdapter(adapter)
-                 adapter.notifyDataSetChanged()
-
-     })
-*/
-
-
-
-
-        listview.setOnItemClickListener(OnItemClickListener { parent, view, position, id ->
-            val sid = (view.findViewById(R.id.tv_id) as TextView).text.toString()
-            val name = (view.findViewById(R.id.tv_name) as TextView).text.toString()
-            val publisher = (view.findViewById(R.id.tv_publisher) as TextView).text.toString()
-            val platform = (view.findViewById(R.id.tv_platform) as TextView).text.toString()
-            val price = (view.findViewById(R.id.tv_price) as TextView).text.toString()
-
-            Toast.makeText(
-                applicationContext,
-                "S no : " + sid + "\n"
-                        + "Name : " + name + "\n"
-                        + "Publisher : " + publisher + "\n"
-                        + "Platform : " + platform + "\n"
-                        + "Price : " + price
-                        + "DELETED", Toast.LENGTH_SHORT
-            ).show()
-            viewModel.onDelete(sid.toLong())
-
-        })
-
-
-        getAllPlatforms().forEach{
-            adapter1.add(it)
-        }
-
-        spinner=findViewById(R.id.spinner)
-    spinner.adapter=adapter1
-    spinner.onItemSelectedListener=viewModel
-
+        adapter.swapItems(viewModel.videoGameList)
     }
+
+
+
+
+
+
 }

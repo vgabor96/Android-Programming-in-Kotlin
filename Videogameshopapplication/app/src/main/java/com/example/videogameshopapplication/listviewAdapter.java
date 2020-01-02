@@ -74,6 +74,11 @@ public class listviewAdapter extends BaseAdapter {
 
             return convertView;
         }
+
+        public void swapItems(ArrayList<VideoGame> items){
+            this.productList = items;
+            notifyDataSetChanged();
+        }
     }
 
 
